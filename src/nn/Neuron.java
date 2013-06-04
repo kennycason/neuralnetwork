@@ -13,38 +13,18 @@ public class Neuron {
 
 	private double value; 						// this contains the value of this node
 	
-	private double threshold;
-	
 	private double learningRateCoefficient; 	// learning rate * learning rate coefficient = total learning rate
 	
 	private LinkedList<Neuron> links; 			// the links to other nodes
-												// [0] = layerID
-												// [1] = position in layer
+
 	private LinkedList<Double> weights; 		// weights 
 	
 	private LinkedList<Neuron> prev;			// links to the nodes that connect to this node
 	
 	private boolean check;
-
-	// used for keeping up with the nodes position in the layer
-
-	/**
-	 * Constructor for objects of class MLLNode
-	 * @Param double - the value being stored in the node
-	 * @param _threshold
-	 */
-	public Neuron(double val, double thresh) {
-		value = val;
-		threshold = thresh;
-		check = false;
-		prev = new LinkedList<Neuron>();
-		links = new LinkedList<Neuron>();
-		weights = new LinkedList<Double>();
-	}
 	
 	public Neuron() {
 		value = 0;
-		threshold = 0.65;
 		check = false;
 		prev = new LinkedList<Neuron>();
 		links = new LinkedList<Neuron>();
@@ -66,22 +46,6 @@ public class Neuron {
 	 */
 	public void setValue(double val) {
 		value = val;
-	}
-	
-	/**
-	 * 
-	 * @return threshold
-	 */
-	public double getThreshold() {
-		return threshold;
-	}
-	
-	/**
-	 * 
-	 * @param outputThreshold
-	 */
-	public void setThreshold(double val) {
-		threshold = val;
 	}
 	
 	/**

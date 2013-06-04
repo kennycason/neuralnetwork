@@ -11,8 +11,7 @@ import java.util.Random;
 public class Layer {
 
 	private int numNeurons; // 神経数: number of neurons
-	private int layerID; // variable used that can be used for identifying this
-							// laer
+
 	private double[] teacherSignals;// 教師信号: teacher signal
 	private double[] errors; // 誤差: error
 	private double learningRate; // 学習率: learning rate
@@ -25,14 +24,13 @@ public class Layer {
 	Layer parentLayer; // 親層: parent layer
 	Layer childLayer; // 子層: child layer
 
-	// Randomizer rand; // 層を初期化する時、重みをランダムに設定する: Set weights randomly upon
+	// 層を初期化する時、重みをランダムに設定する: Set weights randomly upon
 	// initialization of the layer
 	Random rand;
 
 	public Layer() {
 		parentLayer = null;
 		childLayer = null;
-		// rand = new Randomizer(System.currentTimeMillis());
 		rand = new Random();
 	}
 
@@ -61,19 +59,12 @@ public class Layer {
 		}
 		if (child != null) {
 			childLayer = child;
-			// System.out.println("INITING LAYER: numNeurons ="+numNeurons);
-			// System.out.println("INITING LAYER: this ="+this);
-			// System.out.println("INITING LAYER: childLayer ="+childLayer);
-			// System.out.println("INITING LAYER: childLayer num neurons ="+childLayer.neurons.length);
 			// connect each node to each node in the child layer
 			for (Neuron node : neurons) {
-				// System.out.println("NUM CHILD LAYER NODES: "+childLayer.numNeurons);
 				for (int i = 0; i < childLayer.numNeurons; i++) {
 					node.connectNode(childLayer.neurons[i]);
-					node.setWeight(i, rand.nextInt(200) / 100.0 - 1); // 重みとバイアス重みを初期化する:
-																		// initialize
-																		// the
-																		// weights
+					// 重みとバイアス重みを初期化する: initialize the weights
+					node.setWeight(i, rand.nextInt(200) / 100.0 - 1); 
 				}
 			}
 			if (useBias) {
@@ -102,13 +93,9 @@ public class Layer {
 		if (childLayer != null) {
 
 			for (Neuron node : neurons) {
-				// System.out.println("WALKING OVER NODE, NUM of WEIGHTS :"+node.getWeights().size());
 				for (int i = 0; i < node.getAllLinked().size(); i++) {
-					// System.out.println("WEIGHT: "+node.getWeight(i));
-					node.setWeight(i, rand.nextInt(200) / 100.0 - 1); // 重みとバイアス重みを初期化する:
-																		// initialize
-																		// the
-																		// weights
+					// 重みとバイアス重みを初期化する: initialize the weights
+					node.setWeight(i, rand.nextInt(200) / 100.0 - 1); 
 				}
 			}
 		}
@@ -133,8 +120,7 @@ public class Layer {
 				for (int j = 0; j < neurons[i].getAllLinked().size(); j++) {
 					sum += childLayer.errors[j] * neurons[i].getWeight(j);
 				}
-				errors[i] = sum * neurons[i].getValue()
-						* (1.0 - neurons[i].getValue());
+				errors[i] = sum * neurons[i].getValue() * (1.0 - neurons[i].getValue());
 			}
 		}
 	}
@@ -152,15 +138,10 @@ public class Layer {
 							neurons[i].getWeight(j) + learningRate
 									* childLayer.errors[j]
 									* neurons[i].getValue());
-					if (Math.abs(neurons[i].getWeight(j)) < .0001) {
-						// neurons[i].deleteLinkedElement(j);
-						// System.out.println("Link Deleted");
-					}
 				}
 			}
 
 			if (useBias) {
-				// System.out.println("USING BIAS");
 				for (int i = 0; i < childLayer.numNeurons; i++) {
 					biasWeights[i] += learningRate * childLayer.errors[i]
 							* biasValues[i];
@@ -227,7 +208,7 @@ public class Layer {
 	/**
 	 * printList - prints the contents of the list recursively
 	 * 
-	 * @Param MLLNode - the node being printed
+	 * @Param Neuron - the node being printed
 	 */
 	public String printList(Neuron node, String s, int depth) {
 		if (!node.getCheck()) {
@@ -345,22 +326,6 @@ public class Layer {
 	 */
 	public void setTeacherSignal(int i, double signal) {
 		teacherSignals[i] = signal;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public int getLayerID() {
-		return layerID;
-	}
-
-	/**
-	 * 
-	 * @param id
-	 */
-	public void setLayerID(int id) {
-		layerID = id;
 	}
 
 	/**

@@ -44,13 +44,11 @@ public class NeuralNetwork {
 		outputLayer = new Layer();
 
 		// 出力層: output layer
-		outputLayer.setLayerID(config.numCenterLayers + 2);
 		outputLayer.init(config.numOutputNodes,
 				centerLayers[config.numCenterLayers - 1], null, config.bias);
 		// System.out.println("OUTPUT INITED");
 		// 中間層: middle layer
 		for (int i = config.numCenterLayers - 1; i >= 0; i--) {
-			centerLayers[i].setLayerID(i + 1);
 			if (i == 0) {
 				if (config.numCenterLayers == 1) {// もし中間層の最後の層だったら、出力層と繋がる; if
 													// it is the last of the
@@ -83,7 +81,6 @@ public class NeuralNetwork {
 			}
 		}
 		// 入力層: input layer
-		inputLayer.setLayerID(1);
 		inputLayer.init(config.numInputNodes, null, centerLayers[0],
 				config.bias);
 		setLearningRate(config.learningRate);
