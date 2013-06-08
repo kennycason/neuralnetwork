@@ -39,7 +39,6 @@ public class Neuron {
 		return value;
 	}
 
-
 	/**
 	 * setValue - sets the value of this node
 	 * @Param double - the value
@@ -90,7 +89,6 @@ public class Neuron {
 		return weights.get(i);
 	}
 	
-
 	/**
 	 * getWeights - returns all the links weights
 	 * @Return LinkedList<MLLNode> - the integer LinkedList<MLLNode> of weights

@@ -171,11 +171,9 @@ public class Layer {
 											// inputlayer through function
 					thisNode.setValue(sigmoid(thisNode.getValue()));
 				}
-				// if(thisNode.getValue() > thisNode.getThreshold()) {
+
 				for (int i = 0; i < thisNode.getAllLinked().size(); i++) {
-					// if(thisNode.getValue() > thisNode.getThreshold()) {
-					sum = 0.0;
-					sum += thisNode.getValue() * thisNode.getWeight(i);
+					sum = thisNode.getValue() * thisNode.getWeight(i);
 					if (useBias) {
 						sum += biasValues[i] * biasWeights[i];
 					}
@@ -184,18 +182,15 @@ public class Layer {
 							.setValue(
 									thisNode.getAllLinked().get(i).getValue()
 											+ sum);
-					// } else {
-					// System.out.println("Didnt fire");
-					// }
+
 				}
 			}
 		} else { // is the output layer, so just run the values through the
-					// sigmoid function
+			   // sigmoid function
 			for (Neuron thisNode : neurons) {
 				thisNode.setValue(sigmoid(thisNode.getValue()));
 			}
 		}
-		// System.out.println("Calculating Neuron Values");
 	}
 
 	/**
