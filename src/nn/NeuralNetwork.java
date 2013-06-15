@@ -1,8 +1,8 @@
 package nn;
 
 /**
- * 多数中間層のニューラルネットのクラス（誤差逆伝播法）: multi-center layer neural network (back-error
- * propagation algorithm)
+ * 多数中間層のニューラルネットのクラス（誤差逆伝播法）
+ * multi-center layer neural network (back-error propagation algorithm)
  * 
  * @author kenneth cason
  */
@@ -22,18 +22,8 @@ public class NeuralNetwork {
 	}
 
 	/**
-	 * ニューラルネットを初期化する: initialize the neural network
-	 * 
-	 * @param config
-	 *            .numInputNodes 入力層のノード数: number of nodes in the input layer
-	 * @param numCL
-	 *            中間層数: number of center layers
-	 * @param config
-	 *            .numCenterNodes 中間層のノード数: number of nodes in the center layer
-	 * @param numOuputNodes
-	 *            出力層のノード数: number of nodes in the output layer
-	 * @param config
-	 *            .bias
+	 * ニューラルネットを初期化する
+	 * initialize the neural network
 	 */
 	private void init() {
 		inputLayer = new Layer();
@@ -46,48 +36,43 @@ public class NeuralNetwork {
 		// 出力層: output layer
 		outputLayer.init(config.numOutputNodes,
 				centerLayers[config.numCenterLayers - 1], null, config.bias);
-		// System.out.println("OUTPUT INITED");
 		// 中間層: middle layer
 		for (int i = config.numCenterLayers - 1; i >= 0; i--) {
 			if (i == 0) {
-				if (config.numCenterLayers == 1) {// もし中間層の最後の層だったら、出力層と繋がる; if
-													// it is the last of the
-													// center layers, connect to
-													// the output layer
-					centerLayers[i].init(config.numCenterNodes, inputLayer,
-							outputLayer, config.bias); // 中間層数が一だから、親層＝入力層、子層＝出力層:
-														// because there is only
-														// one center layer,
-														// parent layer = input
-														// layer, child layer =
-														// outputlayer
+				
+				/*
+				 * もし中間層の最後の層だったら、出力層と繋がる 
+				 * if it is the last of the center layers, connect to the output layer
+				 */
+				if (config.numCenterLayers == 1) {
+					/*
+					 * 中間層数が一だから、親層＝入力層、子層＝出力層
+					 * because there is only  one center layer / parent layer = input layer, child layer = output layer
+					 */
+					centerLayers[i].init(config.numCenterNodes, inputLayer, outputLayer, config.bias);
 				} else {
-					centerLayers[i].init(config.numCenterNodes, inputLayer,
-							centerLayers[i + 1], config.bias);
+					centerLayers[i].init(config.numCenterNodes, inputLayer,centerLayers[i + 1], config.bias);
 				}
 			} else { // 前層は入力層ではない: previous layer does not have an input layer
-				if (i == config.numCenterLayers - 1) {// もし中間層の最後の層だったら、出力層と繋がる;
-														// if it is the last of
-														// the center layers,
-														// connect to the output
-														// layer
-					centerLayers[i].init(config.numCenterNodes,
-							centerLayers[i - 1], outputLayer, config.bias);
+				/*
+				 * もし中間層の最後の層だったら、出力層と繋がる
+				 * if it is the last of  the center layers, connect to the output layer
+				 */
+				if (i == config.numCenterLayers - 1) {
+					centerLayers[i].init(config.numCenterNodes, centerLayers[i - 1], outputLayer, config.bias);
 				} else {
-					centerLayers[i].init(config.numCenterNodes,
-							centerLayers[i - 1], centerLayers[i + 1],
-							config.bias);
+					centerLayers[i].init(config.numCenterNodes, centerLayers[i - 1], centerLayers[i + 1], config.bias);
 				}
 			}
 		}
 		// 入力層: input layer
-		inputLayer.init(config.numInputNodes, null, centerLayers[0],
-				config.bias);
+		inputLayer.init(config.numInputNodes, null, centerLayers[0],  config.bias);
 		setLearningRate(config.learningRate);
 	}
 
 	/**
-	 * 入力層から出力層まで前向きを伝播する: propagate from the input layer to the output layer
+	 * 入力層から出力層まで前向きを伝播する
+	 * propagate from the input layer to the output layer
 	 */
 	public void feedForward() {
 		inputLayer.calculateNeuronValues();
@@ -98,8 +83,8 @@ public class NeuralNetwork {
 	}
 
 	/**
-	 * 出力層から入力層まで逆向きに伝播する: back-propagate from the output layer to the input
-	 * layer
+	 * 出力層から入力層まで逆向きに伝播する
+	 *  back-propagate from the output layer to the input layer
 	 */
 	public void backPropagate() {
 		outputLayer.calculateErrors();
@@ -111,7 +96,8 @@ public class NeuralNetwork {
 	}
 
 	/**
-	 * 出力と教師信号の平均２乗誤差を計算する: calculate the average squared error between the
+	 * 出力と教師信号の平均２乗誤差を計算する
+	 * calculate the average squared error between the
 	 * output layer and teacher signal
 	 * 
 	 * @return 平均２乗誤差
@@ -128,7 +114,8 @@ public class NeuralNetwork {
 	}
 
 	/**
-	 * 各層の各ニューロンの値をゼロにする: clear each layer's neuron values
+	 * 各層の各ニューロンの値をゼロにする
+	 * clear each layer's neuron values
 	 */
 	public void clearAllValues() {
 		outputLayer.clearAllValues();
@@ -139,12 +126,11 @@ public class NeuralNetwork {
 	}
 
 	/**
-	 * 　入力層への一つの入力を設定する: set one value in the input layer
+	 * 入力層への一つの入力を設定する
+	 *  set one value in the input layer
 	 * 
-	 * @param i
-	 *            ノード番号: node number
-	 * @param value
-	 *            値: value
+	 * @param i ノード番号: node number
+	 * @param value  値: value
 	 */
 	public void setInput(int i, double value) {
 		if (i >= 0 && i < inputLayer.getNumNeurons()) {
@@ -153,10 +139,10 @@ public class NeuralNetwork {
 	}
 
 	/**
-	 * 　入力層への各入力を設定する: set all values in the input layer
+	 * 入力層への各入力を設定する
+	 * set all values in the input layer
 	 * 
-	 * @param values
-	 *            値: value
+	 * @param values 値: value
 	 */
 	public void setInputs(double[] values) {
 		if (inputLayer.getNumNeurons() == values.length) {
@@ -169,10 +155,10 @@ public class NeuralNetwork {
 	}
 
 	/**
-	 * 　入力層への各入力を設定する: set all values in the input layer
+	 * 入力層への各入力を設定する
+	 * set all values in the input layer
 	 * 
-	 * @param values
-	 *            値: value
+	 * @param values 値: value
 	 */
 	public void setInputs(double[][] values) {
 		for (int y = 0; y < config.inputHeight
@@ -185,9 +171,7 @@ public class NeuralNetwork {
 		}
 	}
 
-	/**
-	 * 
-	 */
+
 	public double getInput(int i) {
 		if (i >= 0 && i < inputLayer.getNumNeurons()) {
 			return inputLayer.getNeuron(i).getValue();
@@ -195,9 +179,6 @@ public class NeuralNetwork {
 		return Double.MAX_VALUE;
 	}
 
-	/**
-	 * 
-	 */
 	public double[] getInputs() {
 		double[] inputs = new double[inputLayer.getNeurons().length];
 		for (int i = 0; i < inputs.length; i++) {
@@ -241,12 +222,11 @@ public class NeuralNetwork {
 	}
 
 	/**
-	 * 出力層への一つの出力を得る: get a value from the output layer
+	 * 出力層への一つの出力を得る
+	 * get a value from the output layer
 	 * 
-	 * @param i
-	 *            ノード番号: node number
-	 * @param value
-	 *            値: value
+	 * @param i ノード番号: node number
+	 * @param value 値: value
 	 */
 	public double getOutput(int i) {
 		if (i >= 0 && i < outputLayer.getNumNeurons()) {
@@ -256,7 +236,8 @@ public class NeuralNetwork {
 	}
 
 	/**
-	 * 出力層への各出力を得る: get all output values
+	 * 出力層への各出力を得る
+	 * get all output values
 	 * 
 	 * @return values 値: values
 	 */
@@ -303,12 +284,11 @@ public class NeuralNetwork {
 	}
 
 	/**
-	 * 出力層の教師信号を設定する: set the teacher signal for the output layer
+	 * 出力層の教師信号を設定する
+	 * set the teacher signal for the output layer
 	 * 
-	 * @param i
-	 *            ノード番号: node number
-	 * @param value
-	 *            教師信号の値: teacher signal value
+	 * @param i ノード番号: node number
+	 * @param value 教師信号の値: teacher signal value
 	 */
 	public void setTeacherSignal(int i, double value) {
 		if (i >= 0 && i < outputLayer.getNumNeurons()) {
@@ -317,10 +297,10 @@ public class NeuralNetwork {
 	}
 
 	/**
-	 * 出力層の教師信号を設定する: set teacher signal values in the output layer
+	 * 出力層の教師信号を設定する
+	 * set teacher signal values in the output layer
 	 * 
-	 * @param values
-	 *            全ての教師信号の値: all of the teacher signal values
+	 * @param values  全ての教師信号の値: all of the teacher signal values
 	 */
 	public void setTeacherSignals(double[] values) {
 		if (outputLayer.getTeacherSignals().length == values.length) {
@@ -329,27 +309,26 @@ public class NeuralNetwork {
 	}
 
 	/**
-	 * 出力層の教師信号を設定する: set teacher signal values in the output layer
+	 * 出力層の教師信号を設定する
+	 * set teacher signal values in the output layer
 	 * 
-	 * @param values
-	 *            全ての教師信号の値: all of the teacher signal values
+	 * @param values 全ての教師信号の値: all of the teacher signal values
 	 */
 	public void setTeacherSignals(double[][] values) {
 		for (int y = 0; y < config.outputHeight
 				&& y < outputLayer.getNumNeurons(); y++) {
 			for (int x = 0; x < config.outputWidth
 					&& x < outputLayer.getNumNeurons(); x++) {
-				outputLayer.setTeacherSignal(y * config.outputWidth + x,
-						values[x][y]);
+				outputLayer.setTeacherSignal(y * config.outputWidth + x, values[x][y]);
 			}
 		}
 	}
 
 	/**
-	 * 学習率を設定する: set the learning rate
+	 * 学習率を設定する
+	 * set the learning rate
 	 * 
-	 * @param rate
-	 *            学習率: learning rate
+	 * @param rate 学習率: learning rate
 	 */
 	public void setLearningRate(double rate) {
 		config.learningRate = rate;
@@ -375,36 +354,12 @@ public class NeuralNetwork {
 		return outputLayer;
 	}
 
-	public void setInputLayer(Layer in) {
-		inputLayer = in;
-	}
-
-	public void setCenterLayers(Layer[] cl) {
-		centerLayers = cl;
-	}
-
-	public void setCenterLayer(int i, Layer cl) {
-		centerLayers[i] = cl;
-	}
-
-	public void setOutputLayer(Layer ol) {
-		outputLayer = ol;
-	}
-
 	public void setInputWidth(int width) {
 		config.inputWidth = width;
 	}
 
 	public void setInputHeight(int height) {
 		config.inputHeight = height;
-	}
-
-	public void setOutputWidth(int width) {
-		config.outputWidth = width;
-	}
-
-	public void setOutputHeight(int height) {
-		config.outputHeight = height;
 	}
 
 	public int getInputWidth() {

@@ -11,22 +11,16 @@ import java.util.LinkedList;
 
 public class Neuron {
 
-	private double value; 						// this contains the value of this node
+	private double value; // this contains the value of this node
 	
-	private double learningRateCoefficient; 	// learning rate * learning rate coefficient = total learning rate
+	private double learningRateCoefficient; // learning rate * learning rate coefficient = total learning rate
 	
-	private LinkedList<Neuron> links; 			// the links to other nodes
+	private LinkedList<Neuron> links; // the links to other nodes
 
-	private LinkedList<Double> weights; 		// weights 
-	
-	private LinkedList<Neuron> prev;			// links to the nodes that connect to this node
-	
-	private boolean check;
-	
+	private LinkedList<Double> weights; // weights 
+
 	public Neuron() {
 		value = 0;
-		check = false;
-		prev = new LinkedList<Neuron>();
 		links = new LinkedList<Neuron>();
 		weights = new LinkedList<Double>();
 	}
@@ -103,14 +97,7 @@ public class Neuron {
 	 */
 	public void connectNode(Neuron node) {
 		links.add(node);
-	//	System.out.println("Orig new Weight length:" + weights.size());
 		weights.add(0.0);
-		//System.out.println("CONNECTING");
-	//	System.out.println("Nodes new Weight length:" + weights.size());
-	//	System.out.println("This "+this);
-	//	System.out.println("node "+node);
-	//	System.out.println("Prev "+node.getPrev());
-		node.getPrev().add(this);
 	}
 
 	/**
@@ -129,47 +116,6 @@ public class Neuron {
 	public Neuron get(int i) {
 		return links.get(i);
 	}
-
-	/**
-	 * getPrev - returns Linked List of previous nodes 
-	 * @Param int - which element to return
-	 * @Return MLLNode - the specific linked element
-	 */
-	public LinkedList<Neuron> getPrev() {
-		return prev;
-	}
-
-	/**
-	 * getPrev - returns Linked List of previous nodes 
-	 * @Param int - which element to return
-	 * @Return MLLNode - the specific linked element
-	 */
-	public Neuron getPrev(int i) {
-		return prev.get(i);
-	}
-	
-	/**
-	 * getCheck - returns whether or not the node is checked
-	 * @Return boolean - checked or not
-	 */
-	public boolean getCheck() {
-		return check;
-	}
-
-	/**
-	 * check - check the node
-	 */
-	public void check() {
-		check = true;
-	}
-
-	/**
-	 * unCheck - uncheck the node
-	 */
-	public void unCheck() {
-		check = false;
-	}
-
 	
 	/**
 	 * deletedLinkedElement - deletes a specific linked element
@@ -177,8 +123,6 @@ public class Neuron {
 	 * @Return double - the linked element being deleted
 	 */
 	public Neuron remove(int i) {
-		// first remove the previous link in the connecting node, i
-		links.get(i).getPrev().remove(this);
 		weights.remove(i);
 		return links.remove(i);
 	}
@@ -188,25 +132,19 @@ public class Neuron {
 	 * @Return LinkedList<MLLNode> - returns all the deleted elements
 	 */
 	public LinkedList<Neuron> deleteAllLinks() {
-		// first remove the previous link in all connecting nodes
-		for(Neuron n : links) {
-			n.getPrev().remove(this);
-		}
 		LinkedList<Neuron> temp = links;
 		links.clear();
 		weights.clear();
 		return temp;
 	}
 	
-
 	/**
 	 * isEqual - compare 2 pieces of value
 	 * @Para double - the value to compare
 	 * @Return boolean - returns true if equal, else false
 	 */
-	public boolean isEqual(double _value) {
-		// System.out.println(this.value+" "+_value);
-	    if (this.value == _value) {
+	public boolean isEqual(double value) {
+	    if (this.value == value) {
 		    return true;
 		}
 		return false;
@@ -218,9 +156,8 @@ public class Neuron {
 	 * @Return double - returns the absolute value of the difference
 	 * between values
 	 */
-	public double compare(double _value) {
-		return Math.abs(this.value - _value);
+	public double compare(double value) {
+		return Math.abs(this.value - value);
 	}
-
 
 }

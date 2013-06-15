@@ -1,18 +1,88 @@
 package nn;
 
+import java.util.Arrays;
+
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class NeuralNetworkTest {
 
+	@Ignore
+	public void test2() {
+		NeuralNetworkConfig config = new NeuralNetworkConfig();
+		config.bias = false;
+		config.numCenterLayers = 1;
+		config.numCenterNodes = 3;
+		config.numInputNodes = 2;
+		config.numOutputNodes = 1;
+		config.learningRate = 0.2;
+		NeuralNetwork nn = new NeuralNetwork(config);
+		
+		int numTrainData = 1;
+		double[][] trainData = new double[numTrainData][nn.getInputs().length];
+		double[][] teacherSignal = new double[numTrainData][nn.getOutputs().length];
+		
+		trainData[0] = new double[]{1.0, 1.0};  // 1 & 1
+
+		teacherSignal[0] = new double[]{1.0};
+
+		for(int i = 0; i < 100; i++) {
+			nn.setInput(0, trainData[0][0]);
+			nn.setInput(1, trainData[0][1]);
+	
+			nn.setTeacherSignal(0, teacherSignal[0][0]);
+			nn.feedForward();
+			System.out.println("FEED FORWARD");
+			System.out.println("V: " + nn.getInputLayer().getNeuron(0).getValue());
+			System.out.println("W: " + nn.getInputLayer().getNeuron(0).getWeights());
+			System.out.println("V: " + nn.getInputLayer().getNeuron(1).getValue());
+			System.out.println("W: " + nn.getInputLayer().getNeuron(1).getWeights());
+	
+			System.out.println("V: " + nn.getCenterLayers()[0].getNeuron(0).getValue());
+			System.out.println("W: " + nn.getCenterLayers()[0].getNeuron(0).getWeights());
+			System.out.println("V: " + nn.getCenterLayers()[0].getNeuron(0).getValue());
+			System.out.println("W: " + nn.getCenterLayers()[0].getNeuron(1).getWeights());
+			System.out.println("V: " + nn.getCenterLayers()[0].getNeuron(0).getValue());
+			System.out.println("W: " + nn.getCenterLayers()[0].getNeuron(2).getWeights());
+			System.out.println(Arrays.toString(nn.getOutputs()));
+			nn.calculateError();
+			nn.backPropagate();
+			
+			System.out.println("BACK PROPAGATE");
+			System.out.println("V: " + nn.getInputLayer().getNeuron(0).getValue());
+			System.out.println("W: " + nn.getInputLayer().getNeuron(0).getWeights());
+			System.out.println("V: " + nn.getInputLayer().getNeuron(1).getValue());
+			System.out.println("W: " + nn.getInputLayer().getNeuron(1).getWeights());
+	
+			System.out.println("V: " + nn.getCenterLayers()[0].getNeuron(0).getValue());
+			System.out.println("W: " + nn.getCenterLayers()[0].getNeuron(0).getWeights());
+			System.out.println("V: " + nn.getCenterLayers()[0].getNeuron(0).getValue());
+			System.out.println("W: " + nn.getCenterLayers()[0].getNeuron(1).getWeights());
+			System.out.println("V: " + nn.getCenterLayers()[0].getNeuron(0).getValue());
+			System.out.println("W: " + nn.getCenterLayers()[0].getNeuron(2).getWeights());
+			System.out.println(Arrays.toString(nn.getOutputs()));
+			
+			nn.clearAllValues();
+		}
+
+		// System.out.println(sigmoid(1.096587868));
+	}
+
+	
+	public double sigmoid(double x) {
+		return (1.0 / (1 + Math.exp(-x)));
+	}
+	
+	
 	@Test
 	public void test() {
 		NeuralNetworkConfig config = new NeuralNetworkConfig();
 		config.bias = false;
 		config.numCenterLayers = 1;
-		config.numCenterNodes = 10;
+		config.numCenterNodes = 20;
 		config.numInputNodes = 2;
 		config.numOutputNodes = 1;
-		config.learningRate = 0.55;
+		config.learningRate = 0.8;
 		NeuralNetwork nn = new NeuralNetwork(config);
 		
 		int numTrainData = 4;
